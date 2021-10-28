@@ -1,5 +1,6 @@
+const emitter = mitt();
+
 const inputComponent = {
-  /*template*/
   template: `<input
           :placeholder="placeholder"
           v-model="input"
@@ -14,12 +15,25 @@ const inputComponent = {
   emits: ["add-note"],
   methods: {
     monitorEnterKey() {
-      this.$emit("add-note", {
+      emitter.emit("add-note", {
         note: this.input,
         timestamp: new Date().toLocaleString(),
       });
       this.input = "";
     },
+  },
+};
+
+const noteCountComponent = {
+  /*template*/
+  template: `<div>Total notes: <strong>{{ noteCount }}</strong></div>`,
+  data() {
+    return {
+      noteCount: 0,
+    };
+  },
+  created() {
+    emitter.on("add-note", (event) => this.noteCount++);
   },
 };
 
@@ -31,17 +45,17 @@ const app = {
       placeholder: "Enter a note",
     };
   },
+  created() {
+    emitter.on("add-note", (event) => this.addNote(event));
+  },
   components: {
     "input-component": inputComponent,
+    "note-count-component": noteCountComponent,
   },
   methods: {
     addNote(event) {
       this.notes.push(event.note);
       this.timestamps.push(event.timestamp);
-    },
-    removeNote(index) {
-        this.notes.splice(index, 1);
-        this.timestamps.splice(index, 1);
     },
   },
 };

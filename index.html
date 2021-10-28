@@ -3,7 +3,7 @@
 
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.3/css/bulma.css">
-    <link rel="stylesheet" href="../styles/styles.css" />
+    <link rel="stylesheet" href="../public/styles.css" />
     <title>Custom Events</title>
 </head>
 
@@ -13,18 +13,15 @@
             <div class="columns">
                 <div class="column has-text-centered">
                     <strong>Notes</strong>
-                    <div v-for="(note, index) in notes" :key="index" class="notes">
-                        <div class="finish" @click="removeNote(index)">X</div> {{ note }}
-                    </div>
+                    <div v-for="note in notes" class="notes">{{ note }}</div>
                 </div>
                 <div class="column has-text-centered">
                     <strong>Timestamp</strong>
-                    <div v-for="(timestamp, index) in timestamps" :key="index" class="timestamps">
-                        {{ timestamp }}
-                    </div>
+                    <div v-for="timestamp in timestamps" class="timestamps">{{ timestamp }}</div>
                 </div>
             </div>
-            <input-component @add-note="addNote" :placeholder="placeholder"></input-component>
+            <input-component :placeholder="placeholder"></input-component>
+            <note-count-component></note-count-component>
         </div>
     </div>
 
